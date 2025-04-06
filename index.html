@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<style>
+
+</style>
+
+<body>
+
+</body>
+<script>
+let serverIP = '192.168.131.23';
+let serverPort = '17668';
+let getDataAddr = '/retrieval/data/getData.json?pv=';
+let retrievalAddr = 'http://' + serverIP + ':' + serverPort + getDataAddr;
+let fromDate = new Date('2024-07-09T09:00:00');
+let toDate = new Date('2024-07-09T18:00:00');
+
+function retrievalData(pv) {
+    let retrievalUrl = retrievalAddr + pv + '&from=' + fromDate.toISOString() + '&to=' + toDate.toISOString();
+    console.log('Retrieving data from:', retrievalUrl);
+    
+    fetch(retrievalUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Data retrieved successfully:', data[0].data[0].val);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
+
+retrievalData('KOBRA-BD:BDFC-PicoA:CurrentRBnA');
+
+</script>
+
+</html>
